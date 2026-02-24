@@ -171,6 +171,9 @@ private struct LineImageView: View {
                pressingVerseID == verse.verseID
     }
 
+    // ✅ لون الهايلايت — أخضر زيتوني فاتح
+    private let highlightColor = Color(red: 71/255, green: 98/255, blue: 46/255).opacity(0.18)
+
     @ViewBuilder
     private func verseHighlightsView(verse: Verse, geometry: GeometryProxy) -> some View {
         ForEach(verse.highlights1441.filter({ $0.line == line }), id: \.self) { highlight in
@@ -180,7 +183,7 @@ private struct LineImageView: View {
             let highlightHeight = geometry.size.height * 0.94
             
             Rectangle()
-                .fill(shouldHighlight(verse) ? Color(.accent900) : Color.clear)
+                .fill(shouldHighlight(verse) ? highlightColor : Color.clear)
                 .cornerRadius(8, corners: selectedCorners)
                 .frame(width: highlightWidth, height: highlightHeight)
                 .contentShape(Rectangle())
@@ -272,4 +275,3 @@ private struct LineImageView: View {
         }
     }
 }
-
