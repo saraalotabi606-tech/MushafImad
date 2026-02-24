@@ -18,18 +18,11 @@ public struct PageHeaderView: View {
     
     public var body: some View {
         HStack {
-            // Use the new PageHeader functionality for better formatted display
             let headerDisplay = getPageHeaderDisplay(page: page)
             
-            HStack(spacing: 25) {
-                if let juz = headerDisplay.juz {
-                    Text(juz)
-                        .font(.system(size: 14, weight: .medium))
-                }
-                
-                if let hizb = headerDisplay.hizb {
-                    HizbProgressView(hizbInfo: hizb)
-                }
+            if let juz = headerDisplay.juz {
+                Text(juz)
+                    .font(.chapterNames(size: 20))
             }
             
             Spacer()
@@ -39,26 +32,57 @@ public struct PageHeaderView: View {
                     .font(.chapterNames(size: 24))
             }
         }
-        .font(.system(size: 12, weight: .semibold))
-        .foregroundStyle(.brand900)
+        .foregroundColor(.brand900)
         .padding(.horizontal, horizentalPadding)
+        .padding(.vertical, 4)
         .environment(\.layoutDirection, .rightToLeft)
     }
     
-    public func getPageHeaderDisplay(page: Page) -> (juz: String?, hizb: HizbDisplayInfo?, titles: [String]) {
-        // Get the header for the current Mushaf type (defaulting to 1441)
+    public func getPageHeaderDisplay(page: Page) -> (juz: String?, titles: [String]) {
         guard let header = page.header1441 else {
-            return (nil, nil, [])
+            return (nil, [])
         }
-        let titles:[String] = header.chapters.map { $0.arabicTitle }
-        // Format Juz display
-        let juzDisplay: String? = header.part.map { "الجزء \($0.number)" }
+        let titles: [String] = header.chapters.map { $0.arabicTitle }
         
-        // Format Hizb display
-        let hizbDisplay: HizbDisplayInfo? = header.quarter.map { quarter in
-            HizbDisplayInfo(number: quarter.hizbNumber, hizbFraction: quarter.hizbFraction)
+        let juzDisplay: String? = header.part.map {
+            "الجزء \(arabicSpelled($0.number))"
         }
         
-        return (juzDisplay, hizbDisplay, titles)
+        return (juzDisplay, titles)
+    }
+    
+    // MARK: - تحويل الأرقام لكتابة عربية
+    private func arabicSpelled(_ number: Int) -> String {
+        let ones = [
+            "", "الأوّل", "الثاني", "الثالث", "الرابع", "الخامس",
+            "السادس", "السابع", "الثامن", "التاسع", "العاشر",
+            "الحادي عشر", "الثاني عشر", "الثالث عشر", "الرابع عشر", "الخامس عشر",
+            "السادس عشر", "السابع عشر", "الثامن عشر", "التاسع عشر"
+        ]
+        
+        if number <= 0 { return "" }
+        if number < 20 { return ones[number] }
+        
+        let tenPart = number / 10
+        let onePart = number % 10
+        
+        // ٢٠ → العشرون، ٣٠ → الثلاثون
+        let tensOnly = ["", "", "العشرون", "الثلاثون"]
+        if onePart == 0 && tenPart < tensOnly.count {
+            return tensOnly[tenPart]
+        }
+        
+        // ٢١ → الحادي والعشرون، ٢٤ → الرابع والعشرون
+        let onesCompound = [
+            "", "الحادي", "الثاني", "الثالث", "الرابع", "الخامس",
+            "السادس", "السابع", "الثامن", "التاسع"
+        ]
+        let tensCompound = ["", "", "والعشرون", "والثلاثون"]
+        
+        if tenPart < tensCompound.count && onePart < onesCompound.count {
+            return "\(onesCompound[onePart]) \(tensCompound[tenPart])"
+        }
+        
+        return "\(number)"
     }
 }
