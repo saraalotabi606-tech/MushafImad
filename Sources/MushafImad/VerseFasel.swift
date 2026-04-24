@@ -10,23 +10,31 @@ import SwiftUI
 struct VerseFasel: View {
     let number: Int
     var scale: CGFloat = 1.0
-    private let balance:CGFloat = 3.69
-    
+    private let balance: CGFloat = 3.69
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var verseNumberColor: Color {
+        colorScheme == .dark ? .white : .naturalBlack
+    }
+
     var body: some View {
         let baseWidth: CGFloat = 21 * balance
         let baseHeight: CGFloat = 27 * balance
         let baseFontSize: CGFloat = 14 * balance
         let basePadding: CGFloat = 2 * balance
-        let fs = baseFontSize  * scale
+        let fs = baseFontSize * scale
+
         MushafAssets.image(named: "fasel")
             .resizable()
-            .frame(width: baseWidth * scale, height: baseHeight * scale,alignment: .center)
+            .frame(width: baseWidth * scale, height: baseHeight * scale, alignment: .center)
             .overlay {
                 Text(number.toArabic)
                     .font(.uthmanicTN1Bold(size: fs))
+                    .foregroundColor(verseNumberColor)
                     .minimumScaleFactor(0.8)
                     .padding(.horizontal, basePadding * scale)
-                    .offset(x: -1 * scale , y: 1 * scale)
+                    .offset(x: -1 * scale, y: 1 * scale)
             }
             .offset(x: -2, y: -4)
     }
@@ -34,4 +42,5 @@ struct VerseFasel: View {
 
 #Preview {
     VerseFasel(number: 286)
+}
 }
