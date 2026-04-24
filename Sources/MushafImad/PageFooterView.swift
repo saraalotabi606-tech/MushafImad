@@ -16,9 +16,9 @@ public struct PageFooterView: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private var pageNumberColor: Color {
-        colorScheme == .dark ? .white : .naturalBlack
-    }
+  private var pageNumberColor: Color {
+    .naturalBlack
+}
 
     public init(
         pageNumber: Int,
