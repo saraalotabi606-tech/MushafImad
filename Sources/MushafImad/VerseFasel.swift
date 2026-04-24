@@ -12,7 +12,7 @@ struct VerseFasel: View {
     var scale: CGFloat = 1.0
     private let balance: CGFloat = 3.69
 
-    @Environment(\.colorScheme) private var colorScheme
+  
 
   private var verseNumberColor: Color {
     .naturalBlack
@@ -29,14 +29,14 @@ struct VerseFasel: View {
         MushafAssets.image(named: "fasel")
             .resizable()
             .frame(width: baseWidth * scale, height: baseHeight * scale, alignment: .center)
-            .overlay {
-                Text(number.toArabic)
-                    .font(.uthmanicTN1Bold(size: fs))
-                    .foregroundColor(verseNumberColor)
-                    .minimumScaleFactor(0.8)
-                    .padding(.horizontal, basePadding * scale)
-                    .offset(x: -1 * scale, y: 1 * scale)
-            }
+          .overlay {
+    Text(number.toArabic)
+        .font(.uthmanicTN1Bold(size: fs))
+        .foregroundColor(.black)
+        .minimumScaleFactor(0.8)
+        .padding(.horizontal, basePadding * scale)
+        .offset(x: -1 * scale , y: 1 * scale)
+}
             .offset(x: -2, y: -4)
     }
 }
