@@ -79,6 +79,7 @@ public struct MushafView: View {
     @EnvironmentObject private var toastManager: ToastManager
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var systemColorScheme
     @State private var playingVerse: Verse? = nil
 
     @AppStorage("reading_theme") private var readingTheme: ReadingTheme = .white
@@ -87,6 +88,13 @@ public struct MushafView: View {
     @AppStorage("text_font_size") private var textFontSize: Double = 24.0
     @State private var textModeInitialChapter: Int = 1
 
+    private var effectiveReadingTheme: ReadingTheme {
+        systemColorScheme == .dark ? .night : .white
+    }
+
+    private var effectiveInkColor: Color {
+        systemColorScheme == .dark ? .naturalWhite : .naturalBlack
+    }
 
     public init(initialPage: Int? = nil,
                 highlightedVerse: Verse? = nil,
@@ -114,15 +122,19 @@ public struct MushafView: View {
 
     public var body: some View {
         ZStack {
-            readingTheme.color.ignoresSafeArea()
+            effectiveReadingTheme.color.ignoresSafeArea()
             if viewModel.isLoading || !viewModel.isInitialPageReady {
-                LoadingView(message: viewModel.isLoading ? String(localized: "Loading Quran data...") : String(localized: "Preparing page..."))
+                LoadingView(
+                    message: viewModel.isLoading
+                    ? String(localized: "Loading Quran data...")
+                    : String(localized: "Preparing page...")
+                )
             } else {
                 pageView
-                    .foregroundStyle(.naturalBlack)
+                    .foregroundStyle(effectiveInkColor)
             }
         }
-        .environment(\.colorScheme, readingTheme == .night ? .dark : .light)
+        .environment(\.colorScheme, systemColorScheme)
         .opacity(viewModel.contentOpacity)
         .onChange(of: viewModel.scrollPosition) { oldPage, newPage in
             guard let newPage = newPage else { return }
@@ -157,7 +169,6 @@ public struct MushafView: View {
             #endif
         }
         .onChange(of: playerViewModel.playbackState) { oldState, newState in
-            // Clear highlighting when playback stops
             switch newState {
             case .idle:
                 playingVerse = nil
@@ -273,8 +284,8 @@ public struct MushafView: View {
                     ForEach(1...604, id: \.self) { pageNumber in
                         pageContent(for: pageNumber, highlight: currentHighlight)
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .padding(.top,geometry.safeAreaInsets.top)
-                            .padding(.bottom,geometry.safeAreaInsets.bottom)
+                            .padding(.top, geometry.safeAreaInsets.top)
+                            .padding(.bottom, geometry.safeAreaInsets.bottom)
                             .id(pageNumber)
                     }
                 }
