@@ -8,13 +8,13 @@
 import SwiftUI
 
 public struct PageFooterView: View {
-    public let pageNumber: Int
+    
     public let isRight: Bool
 
     public var scale: CGFloat = 1.0
     public var hPadding: CGFloat = 30
 
-    @Environment(\.colorScheme) private var colorScheme
+   
 
   private var pageNumberColor: Color {
     .naturalBlack
@@ -49,14 +49,14 @@ public struct PageFooterView: View {
         MushafAssets.image(named: "pagenumb")
             .resizable()
             .frame(width: baseWidth, height: baseHeight)
-            .overlay {
-                Text(pageNumber.toArabic)
-                    .font(.uthmanicTN1Bold(size: baseFont))
-                    .foregroundColor(pageNumberColor)
-                    .frame(maxWidth: .infinity)
-                    .minimumScaleFactor(0.2)
-                    .offset(y: -2)
-            }
+        .overlay {
+    Text(pageNumber.toArabic)
+        .font(.uthmanicTN1Bold(size: baseFont))
+        .foregroundColor(.black)
+        .frame(maxWidth: .infinity)
+        .minimumScaleFactor(0.2)
+        .offset(y: -2)
+}
     }
 
     public var body: some View {
