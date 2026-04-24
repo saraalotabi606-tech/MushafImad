@@ -6,13 +6,20 @@
 //
 
 import SwiftUI
+
 public struct PageFooterView: View {
     public let pageNumber: Int
     public let isRight: Bool
-    
+
     public var scale: CGFloat = 1.0
     public var hPadding: CGFloat = 30
-    
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var pageNumberColor: Color {
+        colorScheme == .dark ? .white : .naturalBlack
+    }
+
     public init(
         pageNumber: Int,
         isRight: Bool,
@@ -34,12 +41,10 @@ public struct PageFooterView: View {
     }
 
     private var baseWidth: CGFloat { 42 * deviceScaleFactor }
-    
     private var baseHeight: CGFloat { 26 * deviceScaleFactor }
-    
     private var baseFont: CGFloat { 32 * deviceScaleFactor }
-    
     private var basePadding: CGFloat { 16 * deviceScaleFactor }
+
     private var footerContent: some View {
         MushafAssets.image(named: "pagenumb")
             .resizable()
@@ -47,12 +52,13 @@ public struct PageFooterView: View {
             .overlay {
                 Text(pageNumber.toArabic)
                     .font(.uthmanicTN1Bold(size: baseFont))
+                    .foregroundColor(pageNumberColor)
                     .frame(maxWidth: .infinity)
                     .minimumScaleFactor(0.2)
-                    .offset(y:-2)
+                    .offset(y: -2)
             }
     }
-    
+
     public var body: some View {
         HStack {
             if isRight {
