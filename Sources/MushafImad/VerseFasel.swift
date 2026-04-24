@@ -14,9 +14,10 @@ struct VerseFasel: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private var verseNumberColor: Color {
-        colorScheme == .dark ? .white : .naturalBlack
-    }
+  private var verseNumberColor: Color {
+    .naturalBlack
+}
+
 
     var body: some View {
         let baseWidth: CGFloat = 21 * balance
