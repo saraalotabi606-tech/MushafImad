@@ -43,4 +43,4 @@ struct VerseFasel: View {
 #Preview {
     VerseFasel(number: 286)
 }
-}
+
