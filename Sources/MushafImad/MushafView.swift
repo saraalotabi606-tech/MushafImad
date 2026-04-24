@@ -92,9 +92,10 @@ public struct MushafView: View {
         systemColorScheme == .dark ? .night : .white
     }
 
-    private var effectiveInkColor: Color {
-        systemColorScheme == .dark ? .naturalWhite : .naturalBlack
-    }
+   private var effectiveInkColor: Color {
+    systemColorScheme == .dark ? .white : .naturalBlack
+}
+
 
     public init(initialPage: Int? = nil,
                 highlightedVerse: Verse? = nil,
