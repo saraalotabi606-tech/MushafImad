@@ -14,8 +14,10 @@ struct VerseFasel: View {
 
   
 
-  private var verseNumberColor: Color {
-    .naturalBlack
+@Environment(\.colorScheme) private var colorScheme
+
+private var verseNumberColor: Color {
+    colorScheme == .dark ? .white : .black
 }
 
 
@@ -32,7 +34,7 @@ struct VerseFasel: View {
           .overlay {
     Text(number.toArabic)
         .font(.uthmanicTN1Bold(size: fs))
-        .foregroundColor(.black)
+        .foregroundColor(verseNumberColor)
         .minimumScaleFactor(0.8)
         .padding(.horizontal, basePadding * scale)
         .offset(x: -1 * scale , y: 1 * scale)
