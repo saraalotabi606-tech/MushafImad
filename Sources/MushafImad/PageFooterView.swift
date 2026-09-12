@@ -24,7 +24,11 @@ public struct PageFooterView: View {
         self.scale = scale
         self.hPadding = hPadding
     }
+@Environment(\.colorScheme) private var colorScheme
 
+private var pageNumberColor: Color {
+    colorScheme == .dark ? .white : .black
+}
     private var deviceScaleFactor: CGFloat {
         #if canImport(UIKit)
         return UIScreen.main.bounds.width > UIScreen.main.bounds.height ? 2.5 : 1.0
@@ -47,7 +51,7 @@ public struct PageFooterView: View {
          .overlay {
     Text(pageNumber.toArabic)
         .font(.uthmanicTN1Bold(size: baseFont))
-        .foregroundColor(.black)
+        .foregroundColor(pageNumberColor)
         .frame(maxWidth: .infinity)
         .minimumScaleFactor(0.2)
         .offset(y: -2)
